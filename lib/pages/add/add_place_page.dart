@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/places.dart';
 import '../../widgets/other/image_picker.dart';
 
 class AddPlacePage extends StatefulWidget {
@@ -10,6 +14,33 @@ class AddPlacePage extends StatefulWidget {
 
 class _AddPlacePageState extends State<AddPlacePage> {
   final _titleController = TextEditingController();
+  File? _img;
+  void _getImage(File image) => _img = image;
+
+  Future<void> _submit() async {
+    final ttl = _titleController.text.trim();
+
+    if (ttl.isNotEmpty && _img != null) {
+      Provider.of<Places>(context, listen: false).add(title: ttl, image: _img!);
+      Navigator.of(context).pop();
+    } else {
+      await showDialog<Null>(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text('Incomplete Place'),
+            content: const Text('Please fill the entire form.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +63,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
                 ),
               ),
               verticalSpace,
-              const ImagePicker(paddingValue: paddingValue),
+              ImagePicker(pickImgCallback: _getImage, paddingVal: paddingValue),
               verticalSpace,
             ],
           ),
@@ -42,7 +73,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
         ElevatedButton.icon(
           icon: const Icon(Icons.add),
           label: const Text('Add Place'),
-          onPressed: () {},
+          onPressed: _submit,
         ),
       ],
     );
