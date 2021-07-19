@@ -6,9 +6,10 @@ import '../models/place.dart';
 class Database {
   static const placesTable = 'user_places';
 
-  static Future<void> insert(String table, Map<String, dynamic> values) async {
+  static Future<sql.Database> _open() async {
     final dbPath = await sql.getDatabasesPath();
-    final db = await sql.openDatabase(
+
+    return sql.openDatabase(
       path.join(dbPath, 'places.db'),
       version: 1,
       onCreate: (database, _) {
@@ -21,11 +22,14 @@ class Database {
         );
       },
     );
+  }
 
-    await db.insert(
-      table,
-      values,
-      conflictAlgorithm: sql.ConflictAlgorithm.replace,
-    );
+  static Future<void> insert(String tbl, Map<String, dynamic> vls) async {
+    final db = await _open();
+    await db.insert(tbl, vls, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+  }
+
+  static Future<List<Map<String, dynamic>>> get(String table) async {
+    return (await _open()).query(table);
   }
 }

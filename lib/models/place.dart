@@ -15,6 +15,14 @@ class Place {
     required this.image,
   });
 
+  Place.fromStorableMap(Map<String, dynamic> map)
+      : this(
+          id: map[idKey],
+          title: map[ttlKey],
+          location: const Location(lat: 0.0, long: 0.0),
+          image: File(map[imgKey]),
+        );
+
   final String id;
   final String title;
   final Location location;

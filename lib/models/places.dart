@@ -12,6 +12,16 @@ class Places with ChangeNotifier {
   final _values = <Place>[];
   List<Place> get values => [..._values];
 
+  Future<void> pull() async {
+    final data = await Database.get(Database.placesTable);
+
+    _values.clear();
+    for (var recordMap in data) {
+      _values.add(Place.fromStorableMap(recordMap));
+    }
+    notifyListeners();
+  }
+
   Future<void> add({required String title, required File image}) async {
     final appDocsDir = await getApplicationDocumentsDirectory();
     final imgFileName = path.basename(image.path);
