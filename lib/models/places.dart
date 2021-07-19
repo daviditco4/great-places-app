@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
+import '../helpers/database.dart';
 import 'location.dart';
 import 'place.dart';
 
@@ -25,5 +26,7 @@ class Places with ChangeNotifier {
 
     _values.add(newPlace);
     notifyListeners();
+
+    Database.insert(Database.placesTable, newPlace.toStorableMap());
   }
 }
