@@ -34,7 +34,7 @@ class _ImagePickerState extends State<ImagePicker> {
           child: Center(
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(),
+                border: Border.all(color: Colors.grey),
                 image: const DecorationImage(
                   image: AssetImage(
                     'assets/images/image_picker_placeholder.png',
