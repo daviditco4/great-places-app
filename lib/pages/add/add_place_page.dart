@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/places.dart';
-import '../../widgets/other/image_picker.dart';
+import '../../widgets/pickers/image_picker.dart';
+import '../../widgets/pickers/location_picker.dart';
 
 class AddPlacePage extends StatefulWidget {
   static const routeName = 'add-place';
@@ -65,6 +66,7 @@ class _AddPlacePageState extends State<AddPlacePage> {
               verticalSpace,
               ImagePicker(pickImgCallback: _getImage, paddingVal: paddingValue),
               verticalSpace,
+              const LocationPicker(paddingValue: paddingValue),
             ],
           ),
         ),
