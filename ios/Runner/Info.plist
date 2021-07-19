@@ -45,5 +45,7 @@
 	<string>We need permission to access photos in the gallery</string>
 	<key>NSCameraUsageDescription</key>
 	<string>We need permission to use the camera</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need permission to check your location</string>
 </dict>
 </plist>
