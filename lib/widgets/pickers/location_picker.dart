@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+
+import '../../helpers/google_maps.dart';
 
 class LocationPicker extends StatefulWidget {
   const LocationPicker({required this.paddingValue});
@@ -10,6 +13,18 @@ class LocationPicker extends StatefulWidget {
 class _LocationPickerState extends State<LocationPicker> {
   String? _locationMapImageUrl;
 
+  Future<void> _getUserLocation() async {
+    final locationData = await Location().getLocation();
+
+    if (locationData.latitude != null && locationData.longitude != null) {
+      final staticMapImageUrl = GoogleMaps.getStaticImageUrlInCoordinates(
+        locationData.latitude!,
+        locationData.longitude!,
+      );
+      setState(() => _locationMapImageUrl = staticMapImageUrl);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final space = SizedBox.fromSize(size: Size.square(widget.paddingValue));
@@ -17,18 +32,26 @@ class _LocationPickerState extends State<LocationPicker> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           height: 200.0,
-          decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
-          alignment: Alignment.center,
-          child: _locationMapImageUrl == null
-              ? const Text(
-                  'No Location Selected',
-                  style: TextStyle(color: Colors.grey, fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                )
-              : Image.network(_locationMapImageUrl!, fit: BoxFit.cover),
+          child: Center(
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+              alignment: _locationMapImageUrl != null ? null : Alignment.center,
+              child: _locationMapImageUrl == null
+                  ? const Text(
+                      'No Location Selected',
+                      style: TextStyle(color: Colors.grey, fontSize: 20.0),
+                      textAlign: TextAlign.center,
+                    )
+                  : Image.network(
+                      _locationMapImageUrl!,
+                      fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
+                    ),
+            ),
+          ),
         ),
         space,
         Row(
@@ -37,7 +60,7 @@ class _LocationPickerState extends State<LocationPicker> {
             TextButton.icon(
               icon: const Icon(Icons.location_on),
               label: const Text('Use My Location'),
-              onPressed: () {},
+              onPressed: _getUserLocation,
             ),
             space,
             TextButton.icon(
