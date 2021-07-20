@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'models/places.dart';
 import 'pages/add/add_place_page.dart';
 import 'pages/view/places_overview_page.dart';
 
-void main() => runApp(MyApp());
+void main() => dotenv.load().then((_) => runApp(MyApp()));
 
 class MyApp extends StatelessWidget {
   @override
