@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.great_places_app">
+    package="com.daviditcovici.great_places_app">
    <application
         android:label="great_places_app"
         android:icon="@mipmap/ic_launcher">
