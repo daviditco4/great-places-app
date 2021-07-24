@@ -29,7 +29,10 @@ class _LocationPickerState extends State<LocationPicker> {
 
   Future<void> _searchMapLocation() async {
     final mapLocation = await Navigator.of(context).push<Location>(
-      MaterialPageRoute(fullscreenDialog: true, builder: (_) => MapPage()),
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (_) => const MapPage(selectingEnabled: true),
+      ),
     );
   }
 

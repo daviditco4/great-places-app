@@ -23,8 +23,7 @@ class Place {
           image: File(map[imgKey]),
         );
 
-  final String id;
-  final String title;
+  final String id, title;
   final Location location;
   final File image;
 
