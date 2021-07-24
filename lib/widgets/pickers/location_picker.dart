@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as gps;
 
 import '../../helpers/google_maps.dart';
+import '../../models/location.dart';
+import '../../pages/map_page.dart';
 
 class LocationPicker extends StatefulWidget {
   const LocationPicker({required this.paddingValue});
@@ -14,7 +16,7 @@ class _LocationPickerState extends State<LocationPicker> {
   String? _locationMapImageUrl;
 
   Future<void> _getUserLocation() async {
-    final locationData = await Location().getLocation();
+    final locationData = await gps.Location().getLocation();
 
     if (locationData.latitude != null && locationData.longitude != null) {
       final staticMapImageUrl = GoogleMaps.getStaticImageUrlInCoordinates(
@@ -23,6 +25,12 @@ class _LocationPickerState extends State<LocationPicker> {
       );
       setState(() => _locationMapImageUrl = staticMapImageUrl);
     }
+  }
+
+  Future<void> _searchMapLocation() async {
+    final mapLocation = await Navigator.of(context).push<Location>(
+      MaterialPageRoute(fullscreenDialog: true, builder: (_) => MapPage()),
+    );
   }
 
   @override
@@ -66,7 +74,7 @@ class _LocationPickerState extends State<LocationPicker> {
             TextButton.icon(
               icon: const Icon(Icons.map),
               label: const Text('Search In The Map'),
-              onPressed: () {},
+              onPressed: _searchMapLocation,
             ),
           ],
         ),

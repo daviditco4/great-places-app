@@ -30,7 +30,7 @@ class Places with ChangeNotifier {
     final newPlace = Place(
       id: DateTime.now().toIso8601String(),
       title: title,
-      location: const Location(lat: 0.0, long: 0.0),
+      location: const Location(lat: 0.0, lng: 0.0),
       image: permImage,
     );
 

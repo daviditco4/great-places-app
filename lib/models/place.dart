@@ -19,7 +19,7 @@ class Place {
       : this(
           id: map[idKey],
           title: map[ttlKey],
-          location: const Location(lat: 0.0, long: 0.0),
+          location: const Location(lat: 0.0, lng: 0.0),
           image: File(map[imgKey]),
         );
 
