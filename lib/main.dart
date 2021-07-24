@@ -3,8 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'models/places.dart';
-import 'pages/add/add_place_page.dart';
-import 'pages/view/places_overview_page.dart';
+import 'pages/add_place_page.dart';
+import 'pages/places_overview_page.dart';
 
 void main() => dotenv.load().then((_) => runApp(MyApp()));
 
@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.indigo,
           accentColor: Colors.amberAccent,
+          appBarTheme: const AppBarTheme(brightness: Brightness.dark),
         ),
         home: PlacesOverviewPage(),
         routes: {AddPlacePage.routeName: (_) => AddPlacePage()},

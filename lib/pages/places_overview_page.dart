@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/places.dart';
-import '../add/add_place_page.dart';
+import '../models/places.dart';
+import 'add_place_page.dart';
 
 class PlacesOverviewPage extends StatelessWidget {
   @override
