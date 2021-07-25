@@ -5,6 +5,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 import '../helpers/database.dart';
+import '../helpers/google_maps.dart';
 import 'location.dart';
 import 'place.dart';
 
@@ -14,23 +15,26 @@ class Places with ChangeNotifier {
 
   Future<void> pull() async {
     final data = await Database.get(Database.placesTable);
-
     _values.clear();
-    for (var recordMap in data) {
-      _values.add(Place.fromStorableMap(recordMap));
-    }
+    data.forEach((recordMap) => _values.add(Place.fromStorableMap(recordMap)));
     notifyListeners();
   }
 
-  Future<void> add({required String title, required File image}) async {
+  Future<void> add({
+    required String title,
+    required Location loc,
+    required File image,
+  }) async {
     final appDocsDir = await getApplicationDocumentsDirectory();
+    print(appDocsDir);
     final imgFileName = path.basename(image.path);
     final permImage = await image.copy('${appDocsDir.path}/$imgFileName');
+    final address = await GoogleMaps.getFinestAddressInCoords(loc.lat, loc.lng);
 
     final newPlace = Place(
-      id: DateTime.now().toIso8601String(),
+      id: '${loc.lat}N${loc.lng}W',
       title: title,
-      location: const Location(lat: 0.0, lng: 0.0),
+      location: loc.copyWith(address),
       image: permImage,
     );
 

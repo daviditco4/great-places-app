@@ -20,44 +20,48 @@ class PlacesOverviewPage extends StatelessWidget {
         ],
       ),
       body: FutureBuilder(
-          future: Provider.of<Places>(context, listen: false).pull(),
-          builder: (_, snapshot) {
-            return snapshot.connectionState != ConnectionState.done
-                ? const Center(child: CircularProgressIndicator())
-                : Consumer<Places>(
-                    child: const Center(
-                      child: Text('Start adding great places!'),
-                    ),
-                    builder: (_, places, child) {
-                      final placesValues = places.values;
+        future: Provider.of<Places>(context, listen: false).pull(),
+        builder: (_, snapshot) {
+          return snapshot.connectionState != ConnectionState.done
+              ? const Center(child: CircularProgressIndicator())
+              : Consumer<Places>(
+                  child: const Center(
+                    child: Text('Start adding great places!'),
+                  ),
+                  builder: (_, places, child) {
+                    final placesValues = places.values;
 
-                      return placesValues.isEmpty
-                          ? child!
-                          : ListView.separated(
-                              itemCount: placesValues.length,
-                              itemBuilder: (_, index) {
-                                final place = placesValues[index];
+                    return placesValues.isEmpty
+                        ? child!
+                        : ListView.separated(
+                            itemCount: placesValues.length,
+                            itemBuilder: (_, index) {
+                              final plce = placesValues[index];
 
-                                return ListTile(
-                                  onTap: () {},
-                                  leading: SizedBox.fromSize(
-                                    size: const Size.square(50.0),
-                                    child: Image.file(
-                                      place.image,
-                                      fit: BoxFit.cover,
-                                      filterQuality: FilterQuality.medium,
-                                    ),
+                              return ListTile(
+                                leading: SizedBox.fromSize(
+                                  size: const Size.square(50.0),
+                                  child: Image.file(
+                                    plce.image,
+                                    fit: BoxFit.cover,
+                                    filterQuality: FilterQuality.medium,
                                   ),
-                                  title: Text(place.title),
-                                  subtitle: Text('${place.location}'),
-                                  trailing: const Icon(Icons.info_outline),
-                                );
-                              },
-                              separatorBuilder: (_, __) => const Divider(),
-                            );
-                    },
-                  );
-          }),
+                                ),
+                                title: Text(plce.title, maxLines: 1),
+                                subtitle: Text('${plce.location}', maxLines: 2),
+                                trailing: const Icon(Icons.info_outline),
+                                onTap: () {},
+                                isThreeLine: true,
+                              );
+                            },
+                            separatorBuilder: (_, __) {
+                              return const Divider(height: 0.0);
+                            },
+                          );
+                  },
+                );
+        },
+      ),
     );
   }
 }

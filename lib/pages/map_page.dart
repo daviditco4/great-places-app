@@ -5,18 +5,30 @@ import '../helpers/google_maps.dart';
 import '../models/location.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({
+  MapPage({
     required this.selectingEnabled,
-    this.initialTargetLocation = const Location(lat: 37.4221, lng: -122.0841),
-  });
+    this.initialTargetLocation,
+  })  : _alreadySelected = (initialTargetLocation != null),
+        _initialTargetLatLng = initialTargetLocation?.toLatLng() ??
+            const LatLng(37.4221, -122.0841);
+
   final bool selectingEnabled;
-  final Location initialTargetLocation;
+  final Location? initialTargetLocation;
+  final LatLng _initialTargetLatLng;
+  final bool _alreadySelected;
+
   @override
   _MapPageState createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
   LatLng? _selectedLatLng;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget._alreadySelected) _selectedLatLng = widget._initialTargetLatLng;
+  }
 
   void _popSelectedLocation() {
     Navigator.of(context).pop(Location.fromLatLng(_selectedLatLng!));
@@ -25,7 +37,7 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     final slctEnabled = widget.selectingEnabled;
-    final initialLatLng = widget.initialTargetLocation.toLatLng();
+    final initialLatLng = widget._initialTargetLatLng;
     const markerId = MarkerId('m');
 
     return Scaffold(

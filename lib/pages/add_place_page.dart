@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/location.dart';
 import '../models/places.dart';
 import '../widgets/pickers/image_picker.dart';
 import '../widgets/pickers/location_picker.dart';
@@ -15,14 +16,21 @@ class AddPlacePage extends StatefulWidget {
 
 class _AddPlacePageState extends State<AddPlacePage> {
   final _titleController = TextEditingController();
-  File? _img;
-  void _getImage(File image) => _img = image;
+  File? _pickedImage;
+  Location? _pickedLocation;
+  Location? _pickedLoc() => _pickedLocation?.copyWith(_pickedLocation?.addr);
+  void _getImage(File image) => _pickedImage = image;
+  void _getPickedLocation(Location location) => _pickedLocation = location;
 
   Future<void> _submit() async {
     final ttl = _titleController.text.trim();
 
-    if (ttl.isNotEmpty && _img != null) {
-      Provider.of<Places>(context, listen: false).add(title: ttl, image: _img!);
+    if (ttl.isNotEmpty && _pickedImage != null && _pickedLocation != null) {
+      Provider.of<Places>(context, listen: false).add(
+        title: ttl,
+        image: _pickedImage!,
+        loc: _pickedLocation!,
+      );
       Navigator.of(context).pop();
     } else {
       await showDialog<Null>(
@@ -66,7 +74,11 @@ class _AddPlacePageState extends State<AddPlacePage> {
               verticalSpace,
               ImagePicker(pickImgCallback: _getImage, paddingVal: paddingValue),
               verticalSpace,
-              const LocationPicker(paddingValue: paddingValue),
+              LocationPicker(
+                pickLocationCallback: _getPickedLocation,
+                getPickedLocationCallback: _pickedLoc,
+                paddingValue: paddingValue,
+              ),
             ],
           ),
         ),

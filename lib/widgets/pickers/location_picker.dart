@@ -6,8 +6,16 @@ import '../../models/location.dart';
 import '../../pages/map_page.dart';
 
 class LocationPicker extends StatefulWidget {
-  const LocationPicker({required this.paddingValue});
+  const LocationPicker({
+    required this.pickLocationCallback,
+    required this.getPickedLocationCallback,
+    required this.paddingValue,
+  });
+
+  final void Function(Location) pickLocationCallback;
+  final Location? Function() getPickedLocationCallback;
   final double paddingValue;
+
   @override
   _LocationPickerState createState() => _LocationPickerState();
 }
@@ -16,14 +24,17 @@ class _LocationPickerState extends State<LocationPicker> {
   String? _locationMapImageUrl;
 
   Future<void> _getUserLocation() async {
-    final locationData = await gps.Location().getLocation();
+    try {
+      final locationData = await gps.Location().getLocation();
 
-    if (locationData.latitude != null && locationData.longitude != null) {
-      final staticMapImageUrl = GoogleMaps.getStaticImageUrlInCoordinates(
-        locationData.latitude!,
-        locationData.longitude!,
-      );
-      setState(() => _locationMapImageUrl = staticMapImageUrl);
+      if (locationData.latitude != null && locationData.longitude != null) {
+        final latitude = locationData.latitude!;
+        final longitude = locationData.longitude!;
+        _getLocationMapImageUrl(latitude, longitude);
+        widget.pickLocationCallback(Location(lat: latitude, lng: longitude));
+      }
+    } on Exception catch (_) {
+      return;
     }
   }
 
@@ -31,9 +42,22 @@ class _LocationPickerState extends State<LocationPicker> {
     final mapLocation = await Navigator.of(context).push<Location>(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (_) => const MapPage(selectingEnabled: true),
+        builder: (_) {
+          final locatn = widget.getPickedLocationCallback();
+          return MapPage(selectingEnabled: true, initialTargetLocation: locatn);
+        },
       ),
     );
+
+    if (mapLocation != null) {
+      _getLocationMapImageUrl(mapLocation.lat, mapLocation.lng);
+      widget.pickLocationCallback(mapLocation);
+    }
+  }
+
+  void _getLocationMapImageUrl(double lat, double lng) {
+    final staticMapImgUrl = GoogleMaps.getStaticImageUrlInCoordinates(lat, lng);
+    setState(() => _locationMapImageUrl = staticMapImgUrl);
   }
 
   @override

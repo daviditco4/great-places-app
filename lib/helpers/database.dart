@@ -8,8 +8,9 @@ class Database {
 
   static Future<sql.Database> _open() async {
     final dbPath = await sql.getDatabasesPath();
+    print(dbPath);
 
-    return sql.openDatabase(
+    return await sql.openDatabase(
       path.join(dbPath, 'places.db'),
       version: 1,
       onCreate: (database, _) {
@@ -17,6 +18,7 @@ class Database {
           'CREATE TABLE $placesTable('
           '${Place.idKey} TEXT PRIMARY KEY, '
           '${Place.ttlKey} TEXT, '
+          '${Place.latKey} REAL, ${Place.lngKey} REAL, ${Place.adrKey} TEXT, '
           '${Place.imgKey} TEXT'
           ')',
         );
@@ -29,7 +31,7 @@ class Database {
     await db.insert(tbl, vls, conflictAlgorithm: sql.ConflictAlgorithm.replace);
   }
 
-  static Future<List<Map<String, dynamic>>> get(String table) async {
-    return (await _open()).query(table);
+  static Future<List<Map<String, dynamic>>> get(String table) {
+    return _open().then((db) => db.query(table));
   }
 }

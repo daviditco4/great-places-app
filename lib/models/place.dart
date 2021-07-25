@@ -5,7 +5,9 @@ import 'location.dart';
 class Place {
   static const idKey = 'id';
   static const ttlKey = 'title';
-  static const locKey = 'location';
+  static const latKey = 'latitude';
+  static const lngKey = 'longitude';
+  static const adrKey = 'address';
   static const imgKey = 'image';
 
   const Place({
@@ -19,7 +21,11 @@ class Place {
       : this(
           id: map[idKey],
           title: map[ttlKey],
-          location: const Location(lat: 0.0, lng: 0.0),
+          location: Location(
+            lat: map[latKey] as double,
+            lng: map[lngKey] as double,
+            addr: map[adrKey],
+          ),
           image: File(map[imgKey]),
         );
 
@@ -28,6 +34,13 @@ class Place {
   final File image;
 
   Map<String, dynamic> toStorableMap() {
-    return {idKey: id, ttlKey: title, imgKey: image.path};
+    return {
+      idKey: id,
+      ttlKey: title,
+      latKey: location.lat,
+      lngKey: location.lng,
+      adrKey: location.addr,
+      imgKey: image.path,
+    };
   }
 }
