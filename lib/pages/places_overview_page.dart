@@ -3,19 +3,22 @@ import 'package:provider/provider.dart';
 
 import '../models/places.dart';
 import 'add_place_page.dart';
+import 'place_details_page.dart';
 
 class PlacesOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final navigator = Navigator.of(context);
+    final mediaQuery = MediaQuery.of(context);
+    final portraitMode = (mediaQuery.orientation == Orientation.portrait);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Places'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(AddPlacePage.routeName);
-            },
+            onPressed: () => navigator.pushNamed(AddPlacePage.routeName),
           ),
         ],
       ),
@@ -36,22 +39,30 @@ class PlacesOverviewPage extends StatelessWidget {
                         : ListView.separated(
                             itemCount: placesValues.length,
                             itemBuilder: (_, index) {
-                              final plce = placesValues[index];
+                              final place = placesValues[index];
 
                               return ListTile(
                                 leading: SizedBox.fromSize(
                                   size: const Size.square(50.0),
                                   child: Image.file(
-                                    plce.image,
+                                    place.image,
                                     fit: BoxFit.cover,
                                     filterQuality: FilterQuality.medium,
                                   ),
                                 ),
-                                title: Text(plce.title, maxLines: 1),
-                                subtitle: Text('${plce.location}', maxLines: 2),
+                                title: Text(place.title, maxLines: 1),
+                                subtitle: Text(
+                                  '${place.location}',
+                                  maxLines: portraitMode ? 2 : 1,
+                                ),
                                 trailing: const Icon(Icons.info_outline),
-                                onTap: () {},
-                                isThreeLine: true,
+                                onTap: () {
+                                  navigator.pushNamed(
+                                    PlaceDetailsPage.routeName,
+                                    arguments: place.id,
+                                  );
+                                },
+                                isThreeLine: portraitMode,
                               );
                             },
                             separatorBuilder: (_, __) {

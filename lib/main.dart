@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'models/places.dart';
 import 'pages/add_place_page.dart';
+import 'pages/place_details_page.dart';
 import 'pages/places_overview_page.dart';
 
 void main() => dotenv.load().then((_) => runApp(MyApp()));
@@ -21,7 +22,10 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(brightness: Brightness.dark),
         ),
         home: PlacesOverviewPage(),
-        routes: {AddPlacePage.routeName: (_) => AddPlacePage()},
+        routes: {
+          PlaceDetailsPage.routeName: (_) => PlaceDetailsPage(),
+          AddPlacePage.routeName: (_) => AddPlacePage(),
+        },
       ),
     );
   }

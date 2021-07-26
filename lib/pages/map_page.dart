@@ -42,7 +42,11 @@ class _MapPageState extends State<MapPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Map'),
+        title: Text(
+          _selectedLatLng == null
+              ? 'Map'
+              : Location.fromLatLng(_selectedLatLng!).coordinatesToString(),
+        ),
         actions: [
           if (slctEnabled)
             IconButton(

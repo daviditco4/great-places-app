@@ -8,6 +8,7 @@ class Location {
   Location copyWith(String? addr) => Location(lat: lat, lng: lng, addr: addr);
   LatLng toLatLng() => LatLng(lat, lng);
   String _coToString(double co) => co.toStringAsFixed(5).replaceFirst('.', ',');
+  String coordinatesToString() => '${_coToString(lat)}°N ${_coToString(lng)}°W';
   @override
-  String toString() => addr ?? '${_coToString(lat)}°N ${_coToString(lng)}°W';
+  String toString() => addr ?? coordinatesToString();
 }

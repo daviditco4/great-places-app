@@ -12,6 +12,7 @@ import 'place.dart';
 class Places with ChangeNotifier {
   final _values = <Place>[];
   List<Place> get values => [..._values];
+  Place findById(String id) => _values.firstWhere((place) => place.id == id);
 
   Future<void> pull() async {
     final data = await Database.get(Database.placesTable);
