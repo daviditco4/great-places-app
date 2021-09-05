@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daviditcovici.great_places_app">
-   <application
-        android:label="great_places_app"
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:label="Great Places"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
