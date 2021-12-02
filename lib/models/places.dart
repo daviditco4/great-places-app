@@ -27,7 +27,6 @@ class Places with ChangeNotifier {
     required File image,
   }) async {
     final appDocsDir = await getApplicationDocumentsDirectory();
-    print(appDocsDir);
     final imgFileName = path.basename(image.path);
     final permImage = await image.copy('${appDocsDir.path}/$imgFileName');
     final address = await GoogleMaps.getFinestAddressInCoords(loc.lat, loc.lng);

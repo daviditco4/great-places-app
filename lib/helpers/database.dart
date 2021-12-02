@@ -8,7 +8,6 @@ class Database {
 
   static Future<sql.Database> _open() async {
     final dbPath = await sql.getDatabasesPath();
-    print(dbPath);
 
     return await sql.openDatabase(
       path.join(dbPath, 'places.db'),
