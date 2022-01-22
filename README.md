@@ -35,8 +35,10 @@ You'll need:
 
 ```
 - Android KitKat or later (version 4.4W, API level 20).
+
 - Installation of apps from unknown sources permitted (see the "Setting up your device"
 section at https://www.cnet.com/tech/mobile/how-to-install-apps-outside-of-google-play/).
+
 - The application's binary file (download from the "Releases" section in this project's
 GitHub repository home page), then begin the installation by opening the file.
 ```
